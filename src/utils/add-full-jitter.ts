@@ -3,7 +3,7 @@ import type { RandomFunction } from "../types";
 import { ensureRandom } from "./ensure-random";
 
 /**
- * 应用全抖动 (Full Jitter) 策略，返回一个在 [0, delay] 范围内的随机延迟。
+ * 应用全抖动 (Full Jitter) 策略，返回一个在 [0, delay) 范围内的随机延迟。
  *
  * 全抖动提供了最大的随机性，能有效避免高并发下的“惊群效应”。
  *
@@ -15,7 +15,7 @@ import { ensureRandom } from "./ensure-random";
  * ```typescript
  * // 计算 1000ms 的全抖动延迟
  * const jitteredDelay = addFullJitter(1000);
- * // => 结果在 [0, 1000] 范围内
+ * // => 结果在 [0, 1000) 范围内
  * ```
  */
 export const addFullJitter = (

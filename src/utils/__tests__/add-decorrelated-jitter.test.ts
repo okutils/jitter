@@ -10,7 +10,7 @@ describe("addDecorrelatedJitter", () => {
     const results: number[] = [];
 
     for (let i = 0; i < 20; i++) {
-      const rand = i / 19; // 0..1
+      const rand = i === 19 ? 0.999999 : i / 19;
       const next = addDecorrelatedJitter(baseDelay, previous, cap, () => rand);
       expect(next).toBeGreaterThanOrEqual(baseDelay);
       expect(next).toBeLessThanOrEqual(cap);
@@ -27,20 +27,22 @@ describe("addDecorrelatedJitter", () => {
     const previous = 200;
     const cap = 10_000;
     const multiplier = 4;
+    const rand = 0.999999;
     const v = addDecorrelatedJitter(
       baseDelay,
       previous,
       cap,
-      () => 1,
+      () => rand,
       multiplier,
     );
-    // random=1 => baseDelay + (upper-baseDelay)*1 = upper
     const expectedUpper = Math.max(baseDelay, previous * multiplier);
-    expect(v).toBe(expectedUpper);
+    const expected = baseDelay + (expectedUpper - baseDelay) * rand;
+    expect(v).toBeCloseTo(expected);
+    expect(v).toBeLessThan(expectedUpper);
   });
 
   it("当延迟超过 cap 时应进行截断", () => {
-    const v = addDecorrelatedJitter(100, 3000, 500, () => 1);
+    const v = addDecorrelatedJitter(100, 3000, 500, () => 0.999999);
     expect(v).toBe(500);
   });
 

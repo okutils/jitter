@@ -5,8 +5,8 @@ import { ensureRandom } from "./ensure-random";
 /**
  * 应用“固定抖动”算法，在基础延迟上添加一个固定的随机范围。
  *
- * 这种策略在基础延迟上增加一个 `[0, maxJitter]` 范围内的随机值，
- * 最终延迟时间在 `[delay, delay + maxJitter]` 之间。
+ * 这种策略在基础延迟上增加一个 `[0, maxJitter)` 范围内的随机值，
+ * 最终延迟时间在 `[delay, delay + maxJitter)` 之间。
  * 它适用于需要可预测延迟上限的场景。
  *
  * @param delay 基础延迟时间（毫秒）。
@@ -17,7 +17,7 @@ import { ensureRandom } from "./ensure-random";
  *
  * @example
  * ```typescript
- * const delayWithJitter = addFixedJitter(1000, 200); // 结果范围: [1000, 1200]
+ * const delayWithJitter = addFixedJitter(1000, 200); // 结果范围: [1000, 1200)
  * ```
  */
 export const addFixedJitter = (

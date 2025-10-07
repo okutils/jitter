@@ -6,7 +6,7 @@ import { ensureRandom } from "./ensure-random";
  * 应用装饰性抖动 (Decorrelated Jitter) 算法，一种 AWS 推荐的退避策略。
  *
  * 该算法基于前一次的延迟时间计算下一次延迟，通过引入随机性来避免不同客户端之间的重试拥塞。
- * 计算方式：在区间 `[baseDelay, max(baseDelay, previousDelay * multiplier)]` 上取一个随机值，
+ * 计算方式：在区间 `[baseDelay, max(baseDelay, previousDelay * multiplier))` 上取一个随机值，
  * 然后再与 `cap` 取最小值。
  *
  * 注意：

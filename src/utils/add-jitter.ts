@@ -10,7 +10,7 @@ import { ensureRandom } from "./ensure-random";
  * @param delay 基础延迟时间，单位为毫秒。
  * @param factor 抖动因子，一个 0 到 1 之间（含端点）的数字，用于决定抖动的幅度。默认为 `0.2`。
  *                 例如，`factor = 0.2` 时抖动范围为 `[-20%, +20%]`，
- *                 最终延迟范围在 `[delay * (1-factor), delay * (1+factor)]` 内。
+ *                 最终延迟范围在 `[delay * (1-factor), delay * (1+factor))` 内。
  *                 如果超出该区间（例如计算结果为负），会被裁剪到不小于 0。
  * @param random 一个可选的自定义随机数生成函数，应返回 `[0, 1)` 范围内的数字。默认为 `Math.random`。
  * @returns 返回应用抖动后的新延迟时间（毫秒），结果不会小于 0。

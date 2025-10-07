@@ -6,7 +6,7 @@ import { ensureRandom } from "./ensure-random";
  * 应用“相等抖动”算法，一半固定，一半随机。
  *
  * 这种策略将延迟分为两部分：一半是固定的基础延迟，另一半是随机延迟。
- * 最终延迟时间在 `[delay / 2, delay]` 范围内。
+ * 最终延迟时间在 `[delay / 2, delay)` 范围内。
  *
  * @param delay 基础延迟时间（毫秒）。
  * @param random 可选的随机数生成器，默认为 `Math.random`。
@@ -15,7 +15,7 @@ import { ensureRandom } from "./ensure-random";
  *
  * @example
  * ```typescript
- * const delayWithJitter = addEqualJitter(1000); // 结果范围: [500, 1000]
+ * const delayWithJitter = addEqualJitter(1000); // 结果范围: [500, 1000)
  * ```
  */
 export const addEqualJitter = (

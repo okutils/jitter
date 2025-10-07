@@ -5,18 +5,23 @@ import { addJitter } from "../add-jitter";
 describe("addJitter", () => {
   it("当 factor 为默认值 0.2 时，应返回一个在 [0.8*delay, 1.2*delay] 范围内的值", () => {
     const delay = 1000;
-    for (let i = 0; i < 20; i++) {
-      const v = addJitter(delay, undefined, () => i / 19); // 0..1
+    const randomValues = [...Array(20).keys()].map((i) => i / 20);
+    randomValues.push(0.999999);
+    for (const rand of randomValues) {
+      const v = addJitter(delay, undefined, () => rand);
       expect(v).toBeGreaterThanOrEqual(delay * 0.8 - 1e-9);
-      expect(v).toBeLessThanOrEqual(delay * 1.2 + 1e-9);
+      expect(v).toBeLessThan(delay * 1.2 + 1e-9);
     }
   });
 
   it("应正确应用自定义的 factor", () => {
     const delay = 500;
     const factor = 0.5; // [-0.5, +0.5]
-    const v = addJitter(delay, factor, () => 1); // 最大正偏移
-    expect(v).toBeCloseTo(delay * (1 + factor));
+    const rand = 0.999999;
+    const v = addJitter(delay, factor, () => rand);
+    const expected = delay + delay * factor * (rand * 2 - 1);
+    expect(v).toBeCloseTo(expected);
+    expect(v).toBeLessThan(delay * (1 + factor));
   });
 
   it("当参数为负数或 NaN 时应抛出错误", () => {

@@ -3,17 +3,19 @@ import { JitterError } from "../../errors";
 import { addFullJitter } from "../add-full-jitter";
 
 describe("addFullJitter", () => {
-  it("应返回一个在 [0, delay] 范围内的值", () => {
+  it("应返回一个在 [0, delay) 范围内的值", () => {
     const delay = 250;
     const values: number[] = [];
-    for (let i = 0; i <= 10; i++) {
-      const v = addFullJitter(delay, () => i / 10);
+    const randomValues = [...Array(10).keys()].map((i) => i / 10);
+    randomValues.push(0.999999);
+    for (const rand of randomValues) {
+      const v = addFullJitter(delay, () => rand);
       values.push(v);
       expect(v).toBeGreaterThanOrEqual(0);
-      expect(v).toBeLessThanOrEqual(delay);
+      expect(v).toBeLessThan(delay);
     }
-    expect(values).toContain(0); // i=0
-    expect(values).toContain(delay); // i=10
+    expect(values).toContain(0);
+    expect(Math.max(...values)).toBeLessThan(delay);
   });
 
   it("当参数无效时应抛出错误", () => {
