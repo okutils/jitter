@@ -52,5 +52,5 @@
     "test": "pnpm build && node --test src/__tests__/jitter.test.mjs"
   },
   "type": "module",
-  "version": "0.0.2b"
+  "version": "0.0.3"
 }
