@@ -56,6 +56,13 @@ describe('addDecorrelatedJitter', () => {
     assert.throws(() => addDecorrelatedJitter(1, 1, -1), JitterError);
     assert.throws(() => addDecorrelatedJitter(1, 1, 1, Math.random, 0), JitterError);
   });
+
+  it('当 previousDelay 与 multiplier 的乘积溢出时应抛出错误', () => {
+    assert.throws(
+      () => addDecorrelatedJitter(1, Number.MAX_VALUE, 1000, () => 0, 2),
+      JitterError,
+    );
+  });
 });
 
 describe('addEqualJitter', () => {
@@ -103,6 +110,13 @@ describe('addFixedJitter', () => {
   it('当参数无效时应抛出错误', () => {
     assert.throws(() => addFixedJitter(-1, 10), JitterError);
     assert.throws(() => addFixedJitter(10, -1), JitterError);
+  });
+
+  it('当计算结果溢出时应抛出错误', () => {
+    assert.throws(
+      () => addFixedJitter(Number.MAX_VALUE, Number.MAX_VALUE, () => 0.5),
+      JitterError,
+    );
   });
 });
 
@@ -163,6 +177,13 @@ describe('addJitter', () => {
     assert.equal(
       addJitter(10, 1, () => 0),
       0,
+    );
+  });
+
+  it('当计算结果溢出时应抛出错误', () => {
+    assert.throws(
+      () => addJitter(Number.MAX_VALUE, 1, () => 0.75),
+      JitterError,
     );
   });
 });

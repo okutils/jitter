@@ -13,7 +13,7 @@ import { ensureRandom } from "./ensure-random";
  * @param maxJitter 最大抖动值（毫秒）。
  * @param random 可选的随机数生成器，默认为 `Math.random`。
  * @returns 添加抖动后的延迟时间。
- * @throws {JitterError} 如果 `delay` 或 `maxJitter` 不是非负有限数。
+ * @throws {JitterError} 如果 `delay` 或 `maxJitter` 不是非负有限数，或计算结果溢出。
  *
  * @example
  * ```typescript
@@ -34,6 +34,11 @@ export const addFixedJitter = (
 
   const randomNumber = ensureRandom(random);
   const jitter = maxJitter * randomNumber;
+  const result = delay + jitter;
 
-  return delay + jitter;
+  if (!Number.isFinite(result)) {
+    throw new JitterError("calculated delay exceeds the finite number range");
+  }
+
+  return result;
 };

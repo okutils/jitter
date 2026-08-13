@@ -30,7 +30,7 @@ import { ensureRandom } from "./ensure-random";
  * delay = addDecorrelatedJitter(100, delay, 10000);
  * ```
  *
- * @throws {JitterError} 当任意参数为无效数值时抛出。
+ * @throws {JitterError} 当任意参数无效，或中间计算发生数值溢出时抛出。
  */
 export const addDecorrelatedJitter = (
   baseDelay: number,
@@ -55,6 +55,9 @@ export const addDecorrelatedJitter = (
   }
 
   const upperCandidate = previousDelay * multiplier;
+  if (!Number.isFinite(upperCandidate)) {
+    throw new JitterError("calculated delay exceeds the finite number range");
+  }
   const upper = Math.max(baseDelay, upperCandidate);
 
   const randomNumber = ensureRandom(random);

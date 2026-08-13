@@ -23,7 +23,7 @@ import { ensureRandom } from "./ensure-random";
  * console.log(delayWithJitter);
  * ```
  *
- * @throws {JitterError} 如果 `delay` 或 `factor` 不是有效的非负有限数，则抛出错误。
+ * @throws {JitterError} 如果 `delay` 或 `factor` 无效，或计算结果溢出，则抛出错误。
  */
 export const addJitter = (
   delay: number,
@@ -39,6 +39,11 @@ export const addJitter = (
 
   const randomNumber = ensureRandom(random);
   const jitter = delay * factor * (randomNumber * 2 - 1);
+  const result = Math.max(0, delay + jitter);
 
-  return Math.max(0, delay + jitter);
+  if (!Number.isFinite(result)) {
+    throw new JitterError("calculated delay exceeds the finite number range");
+  }
+
+  return result;
 };

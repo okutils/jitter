@@ -151,11 +151,10 @@ const r = ensureRandom(() => 0.42); // 返回 0.42
 | `multiplier`    | `addDecorrelatedJitter`                 | 延迟增长的倍率                             | `> 0` 的有限数，默认 `3` |
 | `maxJitter`     | `addFixedJitter`                        | 固定的最大抖动增量（毫秒）                 | `≥ 0` 的有限数           |
 
-> 已移除文档中误写的 `fixedValue`，真实参数为 `maxJitter`。
-
 **边界与裁剪**：
 
 - 所有函数的数值参数若为负数或非有限数（`Infinity`, `NaN`），将抛出 `JitterError`。
+- 如果计算过程超出 JavaScript 有限数的可表示范围，将抛出 `JitterError`，而不会返回 `Infinity` 或 `NaN`。
 - `addJitter` 的结果会确保不小于 `0`。
 - `addDecorrelatedJitter` 的结果会被 `cap` 值进行上限裁剪。
 
